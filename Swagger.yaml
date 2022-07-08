@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  title: STD21100
+  description: Hello world !
+  version: 1.0.0
+servers:
+- url: https://std21100.com
+tags:
+- name: Students
+- name: Courses
+paths:
+  /students:
+    get:
+      tags:
+      - Students
+      summary: Get all students
+      operationId: getStudents
+      description: Get all students with details
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Students'
+
+    post:
+      tags:
+      - Students
+      summary: Create new student 
+      operationId: addStudent
+      description: Create new student from an array
+      requestBody:
+        description: Students to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudents'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Students'
+          
+components:
+  schemas:
+    CreateStudents:
+      type: object
+      properties:
+        name: 
+          type: string
+    Students:
+      type: object
+      properties:
+        id: 
+          type: integer
+        name: 
+          type: string

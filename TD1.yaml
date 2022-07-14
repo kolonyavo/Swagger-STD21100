@@ -1,0 +1,343 @@
+openapi: 3.0.1
+info:
+  title: STD21100
+  description: Hello world !
+  version: 1.0.0
+servers:
+- url: https://std21100.com
+tags:
+- name: Students
+- name: Courses
+paths:
+  /students:
+    get:
+      tags:
+      - Students
+      summary: Get all students
+      operationId: getStudents
+      description: Get all students with details
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Students'
+
+    post:
+      tags:
+      - Students
+      summary: Create new student 
+      operationId: addStudent
+      description: Create new student from an array
+      requestBody:
+        description: Students to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudents'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Students'
+
+    patch:
+      tags:
+        - Students
+      summary: Update a student
+      operationId: UpdateStudent
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Update student with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudents'
+      responses:
+          200:
+            description: Student updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Students'
+
+    put:
+      tags:
+      - Students
+      summary: Create new student or update an existing student
+      description: Update students when id are provided, create them otherwise.
+      operationId: updateStudents
+      requestBody:
+        description: Students object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Students'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Courses updates
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Students'
+
+  /students/{id}:
+    get:
+        tags:
+        - Students
+        summary: Get student by id
+        operationId: getStudentById
+        description: Get students with details
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        responses:
+          400:
+            description: Bad request
+          200:
+            description: List of students
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Students'
+                    
+    delete:
+        tags:
+        - Students
+        summary: Delete student
+        operationId: deleteStudent
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        responses:
+          200:
+            description: Student is delete
+            
+  /courses:      
+    get:
+        tags:
+        - Courses
+        summary: Get courses
+        operationId: getCourses
+        description: Get all courses with details
+        parameters:
+          - name: page
+            in: query
+            schema:
+              type: integer
+          - name: page_size
+            in: query
+            required: true
+            schema:
+              type: integer
+        responses:
+          400:
+            description: Bad request
+          200:
+            description: List of students
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Courses'
+                    
+    post:
+      tags:
+      - Courses
+      summary: Create new course
+      operationId: addCourse
+      description: Create new course from an array
+      requestBody:
+        description: Course to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCourses'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Courses'
+
+    patch:
+      tags:
+        - Courses
+      summary: Update a Course
+      operationId: UpdateCourse
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Update Course with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCourses'
+      responses:
+          200:
+            description: Course updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Courses'
+
+    put:
+      tags:
+      - Courses
+      description: Update courses when id are provided, create them otherwise.
+      summary: Create new course or update an existing course
+      operationId: updateCourses
+      requestBody:
+        description: Courses object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Courses'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Courses updated
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Courses'
+
+  /courses/{id}:
+    get:
+        tags:
+        - Courses
+        summary: Get courses by id
+        operationId: getCourseByID
+        description: Get all courses with details
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+          
+        responses:
+          400:
+            description: Bad request
+          200:
+            description: List of students
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Courses'
+                    
+    delete:
+        tags:
+        - Courses
+        summary: Delete courses
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        responses:
+          200:
+            description: Courses is delete
+            
+components:
+  schemas:
+    CreateCourses:
+      type: object
+      properties:
+        teacher:
+          type: string
+        code:
+          type: string
+        name: 
+          type: string
+          example: prog1
+        date:
+          type: string
+          format: date
+    Courses:
+      type: object
+      properties:
+        id: 
+          type: integer
+        teacher:
+          type: string
+        code:
+          type: string
+        name: 
+          type: string
+          example: prog1
+        date:
+          type: string
+          format: date
+    CreateStudents:
+      type: object
+      properties:
+        name: 
+          type: string
+    Students:
+      type: object
+      properties:
+        id: 
+          type: integer
+        name: 
+          type: string

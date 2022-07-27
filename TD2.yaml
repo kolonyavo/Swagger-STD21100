@@ -38,14 +38,10 @@ paths:
     get:
       tags:
       - Film
-      summary: Get all films by categories
-      operationId: getfilmsCategories
-      description: Get all films with details by categories
+      summary: Get all films
+      operationId: getfilms
+      description: Get all films with details 
       parameters:
-      - name: categorie
-        in: query
-        schema:
-          type: integer
       - name: page
         in: query
         schema:
@@ -117,6 +113,39 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/films'
+  /films/{category}:
+    get:
+      tags:
+      - Film
+      summary: Get all films by categories
+      operationId: getfilmsCategories
+      description: Get all films with details by categories
+      parameters:
+      - name: category
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/films'
                     
   /films/{id}:
     delete:

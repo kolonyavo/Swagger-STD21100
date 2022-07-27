@@ -1,0 +1,464 @@
+openapi: 3.0.1
+info:
+  title: STD21100 cinema
+  description: API de la gestion d'une selle de cinema
+  version: 1.0.0
+servers:
+- url: https://std21100.com
+tags:
+- name: Film
+- name: Projection
+- name: Hall
+paths:
+  /film:
+    post:
+      tags:
+      - Film
+      summary: Insert a new film 
+      operationId: addFilm
+      description: Create new film from an array
+      requestBody:
+        description: film to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createFilms'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Film added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/films'
+    get:
+      tags:
+      - Film
+      summary: Get all films by categories
+      operationId: getfilmsCategories
+      description: Get all films with details by categories
+      parameters:
+      - name: categorie
+        in: query
+        schema:
+          type: integer
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/films'
+
+    put:
+      tags:
+      - Film
+      summary: Create new film or update an existing film
+      description: Update films when id are provided, create them otherwise.
+      operationId: updatefilms
+      requestBody:
+        description: films object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/films'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Courses updates
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/films'
+
+    patch:
+      tags:
+        - Film
+      summary: Update a film
+      operationId: UpdateFilm
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Update film with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createFilms'
+      responses:
+          200:
+            description: film updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/films'
+                    
+  /films/{id}:
+    delete:
+        tags:
+        - Film
+        summary: Delete a film
+        operationId: deleteFilm
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        responses:
+          200:
+            description: Film is delete
+
+  /projection:
+    post:
+      tags:
+      - Projection
+      summary: Insert a new Projection 
+      operationId: addProjection
+      description: Create new Projection from an array
+      requestBody:
+        description: Projection to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projection'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Projection added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/projection'
+    get:
+      tags:
+      - Projection
+      summary: Get all Projections
+      operationId: getProjections
+      description: Get all Projections with details
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of Projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/projection'
+
+    put:
+      tags:
+      - Projection
+      summary: Create new projection or update an existing projection
+      description: Update Projection when id are provided, create them otherwise.
+      operationId: updateProjection
+      requestBody:
+        description: Projection object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/projection'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Courses updates
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/projection'
+
+    patch:
+      tags:
+        - Projection
+      summary: Update a Projection
+      operationId: UpdateProjection
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Update Projection with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateProjection'
+      responses:
+          200:
+            description: Projection updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/projection'
+
+  /projection/{id}:                  
+    delete:
+        tags:
+        - Projection
+        summary: Delete a Projection
+        operationId: deleteProjection
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        responses:
+          200:
+            description: Projection is delete
+
+  /hall:
+    post:
+      tags:
+      - Hall
+      summary: Insert a new Hall 
+      operationId: addHall
+      description: Create new Hall from an array
+      requestBody:
+        description: Hall to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hall'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Hall added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hall'
+    get:
+      tags:
+      - Hall
+      summary: Get all Halls
+      operationId: getHalls
+      description: Get all Halls with details
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of Halls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hall'
+
+    put:
+      tags:
+      - Hall
+      summary: Create new Hall or update an existing Hall
+      description: Update Hall when number are provided, create them otherwise.
+      operationId: updateHall
+      requestBody:
+        description: Hall object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hall'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Courses updates
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/hall'
+
+    patch:
+      tags:
+        - Hall
+      summary: Update a Hall
+      operationId: UpdateHall
+      parameters:
+        - name: number
+          required: true
+          in: query
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Update Hall with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hall'
+      responses:
+          200:
+            description: Hall updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/hall'
+                    
+  /hall/{number}:
+    delete:
+        tags:
+        - Hall
+        summary: Delete a Hall
+        operationId: deleteHall
+        parameters:
+        - name: number
+          in: path
+          required: true
+          schema:
+            type: string
+        responses:
+          200:
+            description: Hall is delete
+
+components:
+  schemas:
+
+    createFilms:
+      type: object
+      properties:
+        title: 
+          type: string
+          example: Pirates of the Caribbean 1
+        duration:
+          type: string
+          example: 02:23
+        synopsis:
+          type: string
+        realisateur:
+          type: string
+          example: Gore Verbinski
+        realeseDate:
+          type: string
+          format: date
+        categories:
+          type: string
+          example: Action
+
+    films:
+      type: object
+      properties:
+        id: 
+          type: integer
+        title: 
+          type: string
+          example: Pirate of Careebean
+        duration:
+          type: string
+          example: 01:32:56
+        synopsis:
+          type: string
+        realisateur:
+          type: string
+          example: Someone
+        realeseDate:
+          type: string
+          format: date
+        categories:
+          type: string
+          example: Action
+
+    projection:
+      type: object
+      properties:
+        id: 
+          type: integer
+        film:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/films'
+        Hall:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/hall'
+        startProjection:
+          type: string
+          format: date-time
+
+    updateProjection:
+      type: object
+      properties:
+        film:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/films'
+        Hall:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/hall'
+        startProjection:
+          type: string
+          format: date-time
+
+    hall:
+      type: object
+      properties:
+        number: 
+          type: string
+          example: A
+        capacity:
+          type: integer
+          example: 100

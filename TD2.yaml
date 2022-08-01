@@ -253,7 +253,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateProjection'
+              $ref: '#/components/schemas/createProjection'
         required: true
       responses:
         400:
@@ -626,12 +626,11 @@ components:
     createProjection:
       type: object
       properties:
-        id: 
-          type: integer
         Film:
           type: integer
         Hall:
           type: string
+          example: A
         startProjection:
           type: string
           format: date-time 

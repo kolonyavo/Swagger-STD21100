@@ -406,6 +406,60 @@ paths:
           200:
             description: Projection is delete
 
+  /calendar:
+    post:
+      tags:
+      - Projection
+      summary: Create a new Calendar 
+      operationId: createCalendar
+      description: Calendar to be created with these properties
+      requestBody:
+        description: Calendar to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/calendar'
+        required: true
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: Calendar created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/calendar'
+  /calendar/{idCalendar}:
+    patch:
+      tags:
+        - Projection
+      summary: Update a Calendar
+      operationId: UpdateCalendar
+      description: You can modify id of film, identifier of hall and startCalendar properties
+      parameters:
+        - name: idCalendar
+          required: true
+          in: path
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: Update Calendar with properties to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/calendar'
+      responses:
+          200:
+            description: Calendar updated
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/calendar'
   /hall:
     get:
       tags:

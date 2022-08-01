@@ -1,24 +1,24 @@
 openapi: 3.0.1
 info:
   title: STD21100 cinema
-  description: API de la gestion d'une selle de cinema
+  description: Movie theater management API
   version: 1.0.0
 servers:
-- url: https://std21100.com
+- url: https://cinema-STD21100.com
 tags:
-- name: Film
+- name: Films
 - name: Projection
 - name: Hall
 paths:
   /film:
     post:
       tags:
-      - Film
+      - Films
       summary: Insert a new film 
-      operationId: addFilm
+      operationId: createFilm
       description: Create new film from an array
       requestBody:
-        description: film to be created
+        description: Film to create with these properties
         content:
           application/json:
             schema:
@@ -28,7 +28,7 @@ paths:
         400:
           description: Bad request
         200:
-          description: Film added
+          description: Film created
           content:
             application/json:
               schema:
@@ -37,13 +37,14 @@ paths:
                   $ref: '#/components/schemas/films'
     get:
       tags:
-      - Film
+      - Films
       summary: Get all films
-      operationId: getfilms
+      operationId: getFilms
       description: Get all films with details 
       parameters:
       - name: page
         in: query
+        required: true
         schema:
           type: integer
       - name: page_size
@@ -62,15 +63,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/films'
-
     put:
       tags:
-      - Film
+      - Films
       summary: Create new film or update an existing film
-      description: Update films when id are provided, create them otherwise.
-      operationId: updatefilms
+      description: Update film when id are provided, create them otherwise.
+      operationId: updateFilm
       requestBody:
-        description: films object that needs to be added to the store
+        description: Films object that needs to be added to the store
         content:
           application/json:
             schema:
@@ -80,21 +80,22 @@ paths:
         400:
           description: Bad request
         200:
-          description: Courses updates
+          description: Film updated
           content: 
             application/json:
               schema: 
                 $ref: '#/components/schemas/films'
-
+                
+  /film/{id}:
     patch:
       tags:
-        - Film
+        - Films
       summary: Update a film
-      operationId: UpdateFilm
+      operationId: updateAFilm
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           schema:
             type: integer
       requestBody:
@@ -106,28 +107,62 @@ paths:
               $ref: '#/components/schemas/createFilms'
       responses:
           200:
-            description: film updated
+            description: Film updated
             content:
               application/json:
                 schema:
                   type: array
                   items:
                     $ref: '#/components/schemas/films'
-  /films/{category}:
     get:
       tags:
-      - Film
-      summary: Get all films by categories
-      operationId: getfilmsCategories
-      description: Get all films with details by categories
+      - Films
+      summary: Get film by id
+      operationId: getFilmsById
+      description: Get film with his details by his id 
       parameters:
-      - name: category
+      - name: id
         in: path
         required: true
         schema:
           type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/films'
+    delete:
+      tags:
+      - Films
+      summary: Delete a film
+      operationId: deleteFilm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Film is delete
+  
+  /category:
+    get:
+      tags:
+      - Films
+      summary: Get all categories
+      operationId: getCategories
+      description: Get all categories with details
+      parameters:
       - name: page
         in: query
+        required: true
         schema:
           type: integer
       - name: page_size
@@ -145,43 +180,86 @@ paths:
               schema:
                 type: array
                 items:
+                  $ref: '#/components/schemas/useCategory'
+  
+  /category/{identifier}:
+    get:
+      tags:
+      - Films
+      summary: Get a category by its identifier
+      operationId: getCategoryByIdentifier
+      description: Get category with details
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/useCategory'
+
+  /film/{category}:
+    get:
+      tags:
+      - Films
+      summary: Get all films by categories
+      operationId: getFilmsByCategories
+      description: Get all films with details by categories
+      parameters:
+      - name: category
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   $ref: '#/components/schemas/films'
-                    
-  /films/{id}:
-    delete:
-        tags:
-        - Film
-        summary: Delete a film
-        operationId: deleteFilm
-        parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-        responses:
-          200:
-            description: Film is delete
+ 
 
   /projection:
     post:
       tags:
       - Projection
       summary: Insert a new Projection 
-      operationId: addProjection
-      description: Create new Projection from an array
+      operationId: createProjection
+      description: Projection to be created with these properties
       requestBody:
         description: Projection to be created
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/projection'
+              $ref: '#/components/schemas/updateProjection'
         required: true
       responses:
         400:
           description: Bad request
         200:
-          description: Projection added
+          description: Projection created
           content:
             application/json:
               schema:
@@ -197,6 +275,7 @@ paths:
       parameters:
       - name: page
         in: query
+        required: true
         schema:
           type: integer
       - name: page_size
@@ -227,7 +306,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/projection'
+              $ref: '#/components/schemas/createProjection'
         required: true
       responses:
         400:
@@ -238,16 +317,61 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/projection'
+                
+  /projection/week:
+    get:
+      tags:
+      - Projection
+      summary: get all next week's projections
+      operationId: getProjectionsonweek
+      description: Get all Projections with details
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of Projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/calendar'
 
+  /projection/{id}:     
+    get:
+      tags:
+      - Projection
+      summary: Get projection by its id
+      operationId: getProjection
+      description: Get a projection with details
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        400:
+          description: Bad request
+        200:
+          description: List of Projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/projection'
+                  
     patch:
       tags:
         - Projection
       summary: Update a Projection
       operationId: UpdateProjection
+      description: You can modify id of film, identifier of hall and startProjection properties
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           schema:
             type: integer
       requestBody:
@@ -266,8 +390,7 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/projection'
-
-  /projection/{id}:                  
+                    
     delete:
         tags:
         - Projection
@@ -284,30 +407,6 @@ paths:
             description: Projection is delete
 
   /hall:
-    post:
-      tags:
-      - Hall
-      summary: Insert a new Hall 
-      operationId: addHall
-      description: Create new Hall from an array
-      requestBody:
-        description: Hall to be created
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/hall'
-        required: true
-      responses:
-        400:
-          description: Bad request
-        200:
-          description: Hall added
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/hall'
     get:
       tags:
       - Hall
@@ -317,6 +416,7 @@ paths:
       parameters:
       - name: page
         in: query
+        required: true
         schema:
           type: integer
       - name: page_size
@@ -335,48 +435,59 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/hall'
-
-    put:
+                  
+  /hall/{number}:
+    get:
       tags:
       - Hall
-      summary: Create new Hall or update an existing Hall
-      description: Update Hall when number are provided, create them otherwise.
-      operationId: updateHall
-      requestBody:
-        description: Hall object that needs to be added to the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/hall'
+      summary: Get an hall
+      operationId: getHallsByNumber
+      description: Get an hall with details
+      parameters:
+      - name: number
+        in : path
+        required : true
+        schema:
+          type: string
+      - name: page
+        in: query
         required: true
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        schema:
+          type: integer
       responses:
         400:
           description: Bad request
         200:
-          description: Courses updates
-          content: 
+          description: Details of an hall
+          content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/hall'
-
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hall'
     patch:
       tags:
         - Hall
       summary: Update a Hall
-      operationId: UpdateHall
+      operationId: updateHall
       parameters:
         - name: number
           required: true
-          in: query
+          in: path
           schema:
             type: string
       requestBody:
         required: true
-        description: Update Hall with properties to be changed
+        description: Update an hall with capacity property to be changed
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/hall'
+              $ref: '#/components/schemas/updateHall'
       responses:
           200:
             description: Hall updated
@@ -386,26 +497,10 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/hall'
-                    
-  /hall/{number}:
-    delete:
-        tags:
-        - Hall
-        summary: Delete a Hall
-        operationId: deleteHall
-        parameters:
-        - name: number
-          in: path
-          required: true
-          schema:
-            type: string
-        responses:
-          200:
-            description: Hall is delete
+              
 
 components:
   schemas:
-
     createFilms:
       type: object
       properties:
@@ -414,19 +509,20 @@ components:
           example: Pirates of the Caribbean 1
         duration:
           type: string
-          example: 02:23
-        synopsis:
+          example: 02:23:00
+        summary:
           type: string
-        realisateur:
+          example: summary
+        director:
           type: string
           example: Gore Verbinski
         realeseDate:
           type: string
           format: date
-        categories:
-          type: string
-          example: Action
-
+        category:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/category'
     films:
       type: object
       properties:
@@ -437,18 +533,20 @@ components:
           example: Pirate of Careebean
         duration:
           type: string
-          example: 01:32:56
-        synopsis:
+          example: 02:23:00
+        summary:
           type: string
-        realisateur:
+          example: summary
+        director:
           type: string
-          example: Someone
+          example:  Gore Verbinski
         realeseDate:
           type: string
           format: date
-        categories:
-          type: string
-          example: Action
+        category:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/useCategory'
 
     projection:
       type: object
@@ -466,21 +564,43 @@ components:
         startProjection:
           type: string
           format: date-time
-
+          example: "2022-07-31 14:00"
+        endProjection:
+          type: string
+          format: date-time
+          example: "2022-07-31 16:00"
+    createProjection:
+      type: object
+      properties:
+        id: 
+          type: integer
+        Film:
+          type: integer
+        Hall:
+          type: string
+        startProjection:
+          type: string
+          format: date-time 
+          example: "2022-07-31 14:00"
+        endProjection:
+          type: string
+          format: date-time
+          example: "2022-07-31 16:00"
     updateProjection:
       type: object
       properties:
-        film:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/films'
+        Film:
+          type: integer
         Hall:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/hall'
+          type: string
         startProjection:
           type: string
           format: date-time
+          example: "2022-07-31 14:00"
+        endProjection:
+          type: string
+          format: date-time
+          example: "2022-07-31 16:00"
 
     hall:
       type: object
@@ -491,3 +611,45 @@ components:
         capacity:
           type: integer
           example: 100
+    updateHall:
+      type: object
+      properties:
+        capacity:
+          type: integer
+          example: 100
+          
+    category:
+      type: object
+      properties:
+        identifier:
+          type: integer
+    useCategory:
+      type: object
+      properties:
+        identifier:
+          type: integer
+        category: 
+          type: string
+          example: Action
+          
+    calendar:
+      type: object
+      properties:
+        week:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/day'
+          
+    day:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2022-08-01"
+        projections:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/projection'
